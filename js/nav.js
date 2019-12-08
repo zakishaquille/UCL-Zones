@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (page == '') page = 'home';
   else {
     var idxParam = page.indexOf('/');
-    
+
     if(idxParam >= 0) {
       param = page.substring(idxParam+1);
       page = page.substring(0, idxParam);
@@ -71,9 +71,6 @@ function loadPage(page, param=null) {
       var content = document.querySelector('#body-content');
       if (this.status == 200) {
         content.innerHTML = xhttp.responseText;
-
-        if(page == 'home') getStandings();
-        else if(page == 'team' && param != null) getTeam(param);
       } else if (this.status == 404) {
         content.innerHTML = '<h4>Page not found.</h4>';
       } else {
@@ -81,6 +78,30 @@ function loadPage(page, param=null) {
       }
     }
   };
+
+  page = route(page, param);
+
   xhttp.open('GET', 'pages/' + page + '.html', true);
   xhttp.send();
+}
+
+// Routing Page
+function route(page, param) {
+  var actualPage = 'home';
+
+  if(page == 'home') getStandings();
+  else if(page == 'team' && param != null) {
+    actualPage = 'team';
+    getTeam(param);
+  } else if(page == 'team-schedules' && param != null) {
+    actualPage = 'team';
+    getHeadTeam(param);
+    getTeamSchedule(param);
+  } else if(page == 'team-players' && param != null) {
+    actualPage = 'team';
+    getHeadTeam(param);
+    getTeamPlayer(param);
+  }
+
+  return actualPage;
 }

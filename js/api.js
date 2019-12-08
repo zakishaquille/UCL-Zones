@@ -134,6 +134,43 @@ function getStandings() {
     .catch(error);
 }
 
+function getHeadTeam(idTeam) {
+  if ('caches' in window) {
+    caches.match(base_url + "teams/" + idTeam).then(function(response) {
+      if (response) {
+        response.json().then(function (data) {
+          document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
+          document.getElementById("teamName").innerHTML = data.name;
+          document.getElementById("navMenu").innerHTML = `
+            <li><a class="nav-page" href="#team/${idTeam}">Information</a></li>
+            <li><a class="nav-page" href="#team-schedules/${idTeam}">Schedules</a></li>
+            <li><a class="nav-page" href="#team-players/${idTeam}">Players</a></li>
+          `;
+        });
+      }
+    });
+  }
+
+  fetch(base_url + "teams/" + idTeam, {
+    
+    headers: {
+      'X-Auth-Token': apiToken
+    }
+  })
+    .then(status)
+    .then(json)
+    .then(function(data) {
+      document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
+      document.getElementById("teamName").innerHTML = data.name;
+      document.getElementById("navMenu").innerHTML = `
+        <li><a class="nav-page" href="#team/${idTeam}">Information</a></li>
+        <li><a class="nav-page" href="#team-schedules/${idTeam}">Schedules</a></li>
+        <li><a class="nav-page" href="#team-players/${idTeam}">Players</a></li>
+      `;
+    })
+    .catch(error);
+}
+
 function getTeam(idTeam) {
   if ('caches' in window) {
     caches.match(base_url + "teams/" + idTeam).then(function(response) {
@@ -179,6 +216,11 @@ function getTeam(idTeam) {
 
           document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
           document.getElementById("teamName").innerHTML = data.name;
+          document.getElementById("navMenu").innerHTML = `
+            <li><a class="nav-page" href="#team/${idTeam}">Information</a></li>
+            <li><a class="nav-page" href="#team-schedules/${idTeam}">Schedules</a></li>
+            <li><a class="nav-page" href="#team-players/${idTeam}">Players</a></li>
+          `;
           document.getElementById("content").innerHTML = contentHTML;
         });
       }
@@ -186,6 +228,7 @@ function getTeam(idTeam) {
   }
 
   fetch(base_url + "teams/" + idTeam, {
+    
     headers: {
       'X-Auth-Token': apiToken
     }
@@ -233,6 +276,100 @@ function getTeam(idTeam) {
 
       document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
       document.getElementById("teamName").innerHTML = data.name;
+      document.getElementById("navMenu").innerHTML = `
+        <li><a class="nav-page" href="#team/${idTeam}">Information</a></li>
+        <li><a class="nav-page" href="#team-schedules/${idTeam}">Schedules</a></li>
+        <li><a class="nav-page" href="#team-players/${idTeam}">Players</a></li>
+      `;
+      document.getElementById("content").innerHTML = contentHTML;
+    })
+    .catch(error);
+}
+
+function getTeamSchedule(idTeam) {
+  if ('caches' in window) {
+    caches.match(base_url + "teams/" + idTeam + "/matches?status=SCHEDULED").then(function(response) {
+      if (response) {
+        response.json().then(function (data) {
+          var contentHTML = `
+            <div class="col s12">
+              <table class="highlight responsive-table">
+                  <thead>
+                      <tr>
+                          <th>Schedule</th>
+                          <th>Home</th>
+                          <th>Away</th>
+                          <th>Group</th>
+                          <th>League</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+          `;
+
+          data.matches.forEach(function(content){
+            var datetime = new Date(content.utcDate);
+            var formatDate = datetime.getDate() + '/' + (datetime.getMonth() + 1);
+            
+            contentHTML += `
+              <tr>
+                <td>${formatDate}</td>
+                <td>${content.homeTeam.name}</td>
+                <td>${content.awayTeam.name}</td>
+                <td>${content.group}</td>
+                <td>${content.competition.name}</td>
+              </tr>
+            `;
+          });
+
+          contentHTML += `</tbody></table></div>`;
+
+          document.getElementById("content").innerHTML = contentHTML;
+        });
+      }
+    });
+  }
+
+  fetch(base_url + "teams/" + idTeam + "/matches?status=SCHEDULED", {
+    
+    headers: {
+      'X-Auth-Token': apiToken
+    }
+  })
+    .then(status)
+    .then(json)
+    .then(function(data) {
+      var contentHTML = `
+        <div class="col s12">
+          <table class="highlight responsive-table">
+              <thead>
+                  <tr>
+                      <th>Schedule</th>
+                      <th>Home</th>
+                      <th>Away</th>
+                      <th>Group</th>
+                      <th>League</th>
+                  </tr>
+              </thead>
+              <tbody>
+      `;
+
+      data.matches.forEach(function(content){
+        var datetime = new Date(content.utcDate);
+        var formatDate = datetime.getDate() + '/' + (datetime.getMonth() + 1);
+        
+        contentHTML += `
+          <tr>
+            <td>${formatDate}</td>
+            <td>${content.homeTeam.name}</td>
+            <td>${content.awayTeam.name}</td>
+            <td>${content.group}</td>
+            <td>${content.competition.name}</td>
+          </tr>
+        `;
+      });
+
+      contentHTML += `</tbody></table></div>`;
+
       document.getElementById("content").innerHTML = contentHTML;
     })
     .catch(error);
