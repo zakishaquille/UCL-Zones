@@ -9,6 +9,7 @@ var urlsToCache = [
   // "/css/style.css",
   // "/js/materialize.min.js",
   // "/js/nav.js",
+  // "/js/api.js",
   // "/js/service-registry.js",
   // "/favicon.ico",
   // "/fonts/MaterialIcons-Regular.eot",

@@ -20,160 +20,220 @@ function error(error) {
 
 //============== Req Football API ==============
 
-function getEvents() {
+function getStandings() {
   if ('caches' in window) {
-    caches.match(base_url + "eventsnextleague.php?id=4328").then(function(response) {
+    caches.match(base_url + "competitions/2001/standings").then(function(response) {
       if (response) {
         response.json().then(function (data) {
           var contentHTML = "";
-          data.events.forEach(function(content) {
-            contentHTML += `
-              <div class="col s12 m4">
-                <div class="card horizontal">
-                  <div class="card-stacked">
-                    <div class="card-content center-align">
-                      <p>${content.strLeague}</p>
-                      <div class="row center-align">
-                        <div class="col s6">
-                          <p>${content.strHomeTeam}</p>
-                          <p>${content.intHomeScore}</p>
-                        </div>
-                        <div class="col s6">
-                          <p>${content.strAwayTeam}</p>
-                          <p>${content.intAwayScore}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-action">
-                      <a href="./event.html?id=${content.idEvent}" class="nav-page">More...</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            `;
+
+          data.standings.forEach(function(standings) {
+            if(standings.type == 'TOTAL') {
+
+              contentHTML += `
+                <div class="col s12 group-table card">
+                  <table class="striped highlight responsive-table">
+                    <thead>
+                      <tr>
+                        <th colspan="2">${standings.group.replace('_', ' ')}</th>
+                        <th>GP</th>
+                        <th>PTS</th>
+                        <th>W</th>
+                        <th>D</th>
+                        <th>L</th>
+                        <th>GF</th>
+                        <th>GA</th>
+                        <th>GD</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+              `;
+
+              standings.table.forEach(function(content){
+                contentHTML += `
+                  <tr>
+                    <td>${content.position}</td>
+                    <td><a class="nav-page" href='#team?id=${content.team.id}'><img class="img-small" src='${content.team.crestUrl}'/>${content.team.name}</a></td>
+                    <td>${content.playedGames}</td>
+                    <td>${content.points}</td>
+                    <td>${content.won}</td>
+                    <td>${content.draw}</td>
+                    <td>${content.lost}</td>
+                    <td>${content.goalsFor}</td>
+                    <td>${content.goalsAgainst}</td>
+                    <td>${content.goalDifference}</td>
+                  </tr>
+                `;
+              });
+
+              contentHTML += `</tbody></table></div>`;
+            }
           });
 
-          document.getElementById("events").innerHTML = contentHTML;
-        })
+          document.getElementById("content").innerHTML = contentHTML;
+        });
       }
-    })
+    });
   }
 
-  fetch(base_url + "eventsnextleague.php?id=4328")
+  fetch(base_url + "competitions/2001/standings", {
+    headers: {
+      'X-Auth-Token': apiToken
+    }
+  })
     .then(status)
     .then(json)
     .then(function(data) {
       var contentHTML = "";
-      data.events.forEach(function(content) {
-        contentHTML += `
-          <div class="col s12 m4">
-            <div class="card horizontal">
-              <div class="card-stacked">
-                <div class="card-content center-align">
-                  <p>${content.strLeague}</p>
-                  <div class="row center-align">
-                    <div class="col s6">
-                      <p>${content.strHomeTeam}</p>
-                      <p>${content.intHomeScore}</p>
-                    </div>
-                    <div class="col s6">
-                      <p>${content.strAwayTeam}</p>
-                      <p>${content.intAwayScore}</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-action">
-                  <a href="./event.html?id=${content.idEvent}" class="nav-page">More...</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
+
+      data.standings.forEach(function(standings) {
+        if(standings.type == 'TOTAL') {
+
+          contentHTML += `
+            <div class="col s12 group-table card">
+              <table class="striped highlight responsive-table">
+                <thead>
+                  <tr>
+                    <th colspan="2">${standings.group.replace('_', ' ')}</th>
+                    <th>GP</th>
+                    <th>PTS</th>
+                    <th>W</th>
+                    <th>D</th>
+                    <th>L</th>
+                    <th>GF</th>
+                    <th>GA</th>
+                    <th>GD</th>
+                  </tr>
+                </thead>
+                <tbody>
+          `;
+
+          standings.table.forEach(function(content){
+            contentHTML += `
+              <tr>
+                <td>${content.position}</td>
+                <td><a class="nav-page" href='#team/${content.team.id}'><img class="img-small" src='${content.team.crestUrl}'/>${content.team.name}</a></td>
+                <td>${content.playedGames}</td>
+                <td>${content.points}</td>
+                <td>${content.won}</td>
+                <td>${content.draw}</td>
+                <td>${content.lost}</td>
+                <td>${content.goalsFor}</td>
+                <td>${content.goalsAgainst}</td>
+                <td>${content.goalDifference}</td>
+              </tr>
+            `;
+          });
+
+          contentHTML += `</tbody></table></div>`;
+        }
       });
 
-      document.getElementById("events").innerHTML = contentHTML;
+      document.getElementById("content").innerHTML = contentHTML;
     })
     .catch(error);
 }
 
-function getEventDetail() {
-  var urlParams = new URLSearchParams(window.location.search);
-  var idParam = urlParams.get("id");
-
+function getTeam(idTeam) {
   if ('caches' in window) {
-    caches.match(base_url + "lookupevent.php?id=" + idParam).then(function(response) {
+    caches.match(base_url + "teams/" + idTeam).then(function(response) {
       if (response) {
-        response.json().then(function (content) {
-          content = content.events[0];
-
+        response.json().then(function (data) {
           var contentHTML = `
-            <div class="col s12 m4">
-              <div class="card horizontal">
-                <div class="card-stacked">
-                  <div class="card-content center-align">
-                    <p>${content.strLeague}</p>
-                    <div class="row center-align">
-                      <div class="col s5">
-                        <p>${content.strHomeTeam}</p>
-                        <p>${content.intHomeScore}</p>
-                      </div>
-                      <div class="col s2">
-                        <p>vs</p>
-                      </div>
-                      <div class="col s5">
-                        <p>${content.strAwayTeam}</p>
-                        <p>${content.intAwayScore}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-action">
-                    <a href="#">More...</a>
-                  </div>
-                </div>
-              </div>
+            <div class="col s12 m6">
+              <table>
+                <tr>
+                    <td>Name</td><td>:</td><td>${data.name}</td>
+                </tr>
+                <tr>
+                    <td>Short Name</td><td>:</td><td>${data.shortName}</td>
+                </tr>
+                <tr>
+                    <td>Address</td><td>:</td><td>${data.address}</td>
+                </tr>
+                <tr>
+                    <td>Founded</td><td>:</td><td>${data.founded}</td>
+                </tr>
+                <tr>
+                    <td>Club Colors</td><td>:</td><td>${data.clubColors}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="col s12 m6">
+              <table>
+                <tr>
+                    <td>Phone</td><td>:</td><td>${data.phone}</td>
+                </tr>
+                <tr>
+                    <td>Email</td><td>:</td><td>${data.email}</td>
+                </tr>
+                <tr>
+                    <td>Website</td><td>:</td><td>${data.website}</td>
+                </tr>
+                <tr>
+                    <td>Venue</td><td>:</td><td>${data.venue}</td>
+                </tr>
+              </table>
             </div>
           `;
 
-          document.getElementById("body-content").innerHTML = contentHTML;
-        })
+          document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
+          document.getElementById("teamName").innerHTML = data.name;
+          document.getElementById("content").innerHTML = contentHTML;
+        });
       }
-    })
+    });
   }
 
-  fetch(base_url + "lookupevent.php?id=" + idParam)
+  fetch(base_url + "teams/" + idTeam, {
+    headers: {
+      'X-Auth-Token': apiToken
+    }
+  })
     .then(status)
     .then(json)
-    .then(function(content) {
-      content = content.events[0];
-
+    .then(function(data) {
       var contentHTML = `
-        <div class="col s12 m4">
-          <div class="card horizontal">
-            <div class="card-stacked">
-              <div class="card-content center-align">
-                <p>${content.strLeague}</p>
-                <div class="row center-align">
-                  <div class="col s5">
-                    <p>${content.strHomeTeam}</p>
-                    <p>${content.intHomeScore}</p>
-                  </div>
-                  <div class="col s2">
-                    <p>vs</p>
-                  </div>
-                  <div class="col s5">
-                    <p>${content.strAwayTeam}</p>
-                    <p>${content.intAwayScore}</p>
-                  </div>
-                </div>
-              </div>
-              <div class="card-action">
-                <a href="#">More...</a>
-              </div>
-            </div>
-          </div>
+        <div class="col s12 m6">
+          <table>
+            <tr>
+                <td>Name</td><td>:</td><td>${data.name}</td>
+            </tr>
+            <tr>
+                <td>Short Name</td><td>:</td><td>${data.shortName}</td>
+            </tr>
+            <tr>
+                <td>Address</td><td>:</td><td>${data.address}</td>
+            </tr>
+            <tr>
+                <td>Founded</td><td>:</td><td>${data.founded}</td>
+            </tr>
+            <tr>
+                <td>Club Colors</td><td>:</td><td>${data.clubColors}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="col s12 m6">
+          <table>
+            <tr>
+                <td>Phone</td><td>:</td><td>${data.phone}</td>
+            </tr>
+            <tr>
+                <td>Email</td><td>:</td><td>${data.email}</td>
+            </tr>
+            <tr>
+                <td>Website</td><td>:</td><td>${data.website}</td>
+            </tr>
+            <tr>
+                <td>Venue</td><td>:</td><td>${data.venue}</td>
+            </tr>
+          </table>
         </div>
       `;
 
-      document.getElementById("body-content").innerHTML = contentHTML;
-    });
+      document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
+      document.getElementById("teamName").innerHTML = data.name;
+      document.getElementById("content").innerHTML = contentHTML;
+    })
+    .catch(error);
 }

@@ -2,7 +2,15 @@ document.addEventListener("DOMSubtreeModified", function() {
   document.querySelectorAll("#body-content a.nav-page").forEach(function(elm) {
     elm.addEventListener("click", function(event) {
       var page = event.target.getAttribute("href").substr(1);
-      loadPage(page);
+      var param = null;
+      var idxParam = page.indexOf('/');
+
+      if(idxParam >= 0) {
+        param = page.substring(idxParam+1);
+        page = page.substring(0, idxParam);
+      }
+
+      loadPage(page, param);
     });
   });
 }, false);
@@ -14,8 +22,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Load page content
   var page = window.location.hash.substr(1);
+  var param = null;
+
   if (page == '') page = 'home';
-  loadPage(page);
+  else {
+    var idxParam = page.indexOf('/');
+    
+    if(idxParam >= 0) {
+      param = page.substring(idxParam+1);
+      page = page.substring(0, idxParam);
+    }
+  }
+
+  loadPage(page, param);
 
   function loadNav() {
     var xhttp = new XMLHttpRequest();
@@ -45,13 +64,16 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-function loadPage(page) {
+function loadPage(page, param=null) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4) {
       var content = document.querySelector('#body-content');
       if (this.status == 200) {
         content.innerHTML = xhttp.responseText;
+
+        if(page == 'home') getStandings();
+        else if(page == 'team' && param != null) getTeam(param);
       } else if (this.status == 404) {
         content.innerHTML = '<h4>Page not found.</h4>';
       } else {
