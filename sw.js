@@ -1,4 +1,4 @@
-const CACHE_NAME = "uclzones-v2";
+const CACHE_NAME = "uclzones-v3";
 var urlsToCache = [
   "/",
   "/manifest.json",
@@ -8,12 +8,15 @@ var urlsToCache = [
   "/pages/team.html",
   "/css/material-icons.css",
   "/css/materialize.min.css",
-  "/css/style.css",
+  "/css/style.scss",
+  "/js/api.js",
   "/js/materialize.min.js",
   "/js/nav.js",
-  "/js/api.js",
   "/js/service-registry.js",
   "/favicon.ico",
+  "/images/icon x192.png",
+  "/images/icon x512.png",
+  "/images/jumbotron.jpg",
   "/fonts/MaterialIcons-Regular.eot",
   "/fonts/MaterialIcons-Regular.ttf",
   "/fonts/MaterialIcons-Regular.woff",
@@ -38,33 +41,23 @@ self.addEventListener("install", function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.match(event.request, {cacheName:CACHE_NAME})
-    .then(function(response) {
-      if (response) {
-        return response;
-      }
-
-      var fetchRequest = event.request.clone();
-
-      return fetch(fetchRequest).then(
-        function(response) {
-          if(!response || response.status !== 200) {
-            return response;
-          }
-
-          var responseToCache = response.clone();
-
-          caches.open(CACHE_NAME)
-          .then(function(cache) {
-            cache.put(event.request, responseToCache);
-          });
-
+  var base_url = "https://api.football-data.org/v2/";
+  if (event.request.url.indexOf(base_url) > -1) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(function(cache) {
+        return fetch(event.request).then(function(response) {
+          cache.put(event.request.url, response.clone());
           return response;
-        }
-      );
-    })
-  );
+        })
+      })
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request, { ignoreSearch: true }).then(function(response) {
+        return response || fetch (event.request);
+      })
+    )
+  }
 });
 
 self.addEventListener('activate', function(event) {
