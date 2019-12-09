@@ -53,7 +53,7 @@ function getStandings() {
                 contentHTML += `
                   <tr>
                     <td>${content.position}</td>
-                    <td><a class="nav-page" href='#team?id=${content.team.id}'><img class="img-small" src='${content.team.crestUrl}'/>${content.team.name}</a></td>
+                    <td><a class="nav-page" href='#team/${content.team.id}'><img class="img-small" src='${content.team.crestUrl}'/>${content.team.name}</a></td>
                     <td>${content.playedGames}</td>
                     <td>${content.points}</td>
                     <td>${content.won}</td>
@@ -142,7 +142,7 @@ function getTeam(idTeam) {
           var contentHTML = addTeamInfo(data);
           contentHTML += addTeamPlayers(data.squad);
 
-          document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
+          if(data.crestUrl) document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
           document.getElementById("teamName").innerHTML = data.name;
           document.getElementById("content").innerHTML = contentHTML;
         });
@@ -161,7 +161,7 @@ function getTeam(idTeam) {
       var contentHTML = addTeamInfo(data);
       contentHTML += addTeamPlayers(data.squad);
 
-      document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
+      if(data.crestUrl) document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
       document.getElementById("teamName").innerHTML = data.name;
       document.getElementById("content").innerHTML = contentHTML;
     })

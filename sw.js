@@ -1,4 +1,4 @@
-const CACHE_NAME = "uclzones-v3";
+const CACHE_NAME = "uclzones-v4";
 var urlsToCache = [
   "/",
   "/manifest.json",
