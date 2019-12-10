@@ -142,6 +142,12 @@ function getTeam(idTeam) {
           var contentHTML = addTeamInfo(data);
           contentHTML += addTeamPlayers(data.squad);
 
+          var elems = document.querySelectorAll('.fixed-action-btn');
+          M.FloatingActionButton.init(elems);
+          var fab = document.getElementById('addFavorite');
+          fab.addEventListener("click", addFavorite);
+          fab.myParam = data;
+
           if(data.crestUrl) document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
           document.getElementById("teamName").innerHTML = data.name;
           document.getElementById("content").innerHTML = contentHTML;
@@ -160,6 +166,12 @@ function getTeam(idTeam) {
     .then(function(data) {
       var contentHTML = addTeamInfo(data);
       contentHTML += addTeamPlayers(data.squad);
+
+      var elems = document.querySelectorAll('.fixed-action-btn');
+      M.FloatingActionButton.init(elems);
+      var fab = document.getElementById('addFavorite');
+      fab.addEventListener("click", addFavorite);
+      fab.myParam = data;
 
       if(data.crestUrl) document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
       document.getElementById("teamName").innerHTML = data.name;
@@ -199,7 +211,7 @@ function addTeamInfo(data) {
               <td>Email</td><td>:</td><td>${data.email}</td>
           </tr>
           <tr>
-              <td>Website</td><td>:</td><td>${data.website}</td>
+              <td>Website</td><td>:</td><td><a href="${data.website}" target="_blank">${data.website}</a></td>
           </tr>
           <tr>
               <td>Venue</td><td>:</td><td>${data.venue}</td>
@@ -244,4 +256,9 @@ function addTeamPlayers(data) {
   contentHTML += `</tbody></table></div></div>`;
 
   return contentHTML;
+}
+
+// Add favorite function for pass by reference
+function addFavorite(event) {
+  insertFavorite(event.currentTarget.myParam);
 }

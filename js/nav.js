@@ -1,17 +1,6 @@
 document.addEventListener("DOMSubtreeModified", function() {
   document.querySelectorAll("#body-content a.nav-page").forEach(function(elm) {
-    elm.addEventListener("click", function(event) {
-      var page = event.target.getAttribute("href").substr(1);
-      var param = null;
-      var idxParam = page.indexOf('/');
-
-      if(idxParam >= 0) {
-        param = page.substring(idxParam+1);
-        page = page.substring(0, idxParam);
-      }
-
-      loadPage(page, param);
-    });
+    elm.addEventListener("click", navPageClicked);
   });
 }, false);
 
@@ -33,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
       page = page.substring(0, idxParam);
     }
   }
-
+  
   loadPage(page, param);
 
   function loadNav() {
@@ -64,6 +53,20 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+// Navigation non menu event listener
+function navPageClicked(event) {
+  var page = event.target.getAttribute("href").substr(1);
+  var param = null;
+  var idxParam = page.indexOf('/');
+
+  if(idxParam >= 0) {
+    param = page.substring(idxParam+1);
+    page = page.substring(0, idxParam);
+  }
+  
+  loadPage(page, param);
+}
+
 function loadPage(page, param=null) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -89,4 +92,5 @@ function loadPage(page, param=null) {
 function route(page, param) {
   if(page == 'home') getStandings();
   else if(page == 'team' && param != null) getTeam(param);
+  else if(page == 'myfavorite') getAllFavorite();
 }

@@ -92,6 +92,17 @@ nav.menu a {
     margin-bottom: 3%;
 }
 
+.card-image.thumbnail {
+    padding: 1rem;
+}
+
+.card-image.thumbnail img {
+    height: 10rem;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 @media (max-width: 600px) {
     .valign-wrapper.head {
         display: block;
