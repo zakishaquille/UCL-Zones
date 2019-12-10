@@ -6,6 +6,7 @@ var urlsToCache = [
   "/index.html",
   "/pages/home.html",
   "/pages/team.html",
+  "/pages/myfavorite.html",
   "/css/material-icons.css",
   "/css/materialize.min.css",
   "/css/style.scss",

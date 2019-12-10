@@ -39,11 +39,11 @@ function getAllFavorite() {
           <div class="card">
             <div class="card-image thumbnail">
               <img src="${data.crestUrl}">
-              <a class="btn-floating halfway-fab waves-effect waves-light red truncate" id="removeFavorite"><i class="material-icons">remove</i></a>
+              <a class="btn-floating halfway-fab waves-effect waves-light red" id="removeFavorite" onclick="deleteFavorite(${data.idTeam})"><i class="material-icons">remove</i></a>
             </div>
             <div class="card-content">
               <span class="card-title truncate"><a class="nav-page" href="#team/${data.idTeam}">${data.name}</a></span>
-              <a href="${data.website}" target="_blank">${data.website}</a>
+              <a class="truncate" href="${data.website}" target="_blank">${data.website}</a>
             </div>
           </div>
         </div>
@@ -51,5 +51,19 @@ function getAllFavorite() {
     });
 
     document.getElementById("content").innerHTML = contentHTML;
+  });
+}
+
+function deleteFavorite(idTeam) {
+  dbPromise.then(function(db) {
+    var tx = db.transaction('favorite_team', 'readwrite');
+    var store = tx.objectStore('favorite_team');
+    store.delete(idTeam);
+    return tx.complete;
+  }).then(function() {
+    console.log('Data berhasil dihapus');
+    getAllFavorite();
+  }).catch(function() {
+    console.log('Data gagal dihapus')
   });
 }
