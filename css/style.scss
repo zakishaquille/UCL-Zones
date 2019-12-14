@@ -71,6 +71,11 @@ nav.menu a {
     margin-top: 0;
 }
 
+.jumbotron {
+    height: 70vh;
+    overflow: hidden;
+}
+
 .blog-detail p {
     margin-bottom: 2% !important;
 }
@@ -104,6 +109,11 @@ nav.menu a {
 }
 
 @media (max-width: 600px) {
+
+    .jumbotron {
+        height: 32vh;
+    }
+
     .valign-wrapper.head {
         display: block;
     }

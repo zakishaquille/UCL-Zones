@@ -1,4 +1,4 @@
-const CACHE_NAME = "uclzones-v5";
+const CACHE_NAME = "uclzones-v7";
 var urlsToCache = [
   "/",
   "/manifest.json",
@@ -16,6 +16,7 @@ var urlsToCache = [
   "/js/nav.js",
   "/js/service-registry.js",
   "/favicon.ico",
+  "/images/icon x64.png",
   "/images/icon x192.png",
   "/images/icon x512.png",
   "/images/jumbotron.jpg",
@@ -74,5 +75,26 @@ self.addEventListener('activate', function(event) {
         })
       );
     })
+  );
+});
+
+self.addEventListener('push', function(event) {
+  var body;
+  if (event.data) {
+    body = event.data.text();
+  } else {
+    body = 'There\'s new notification';
+  }
+  var options = {
+    body: body,
+    icon: 'images/icon x64.png',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    }
+  };
+  event.waitUntil(
+    self.registration.showNotification('Push Notification', options)
   );
 });

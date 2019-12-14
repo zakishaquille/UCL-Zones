@@ -1,5 +1,6 @@
 var base_url = 'https://api.football-data.org/v2/';
 var apiToken = 'fd9d61eada684f5098fdd9edcdcf4f46';
+var isCached = false;
 
 function status(response) {
   if (response.status !== 200) {
@@ -16,6 +17,7 @@ function json(response) {
 
 function error(error) {
   console.log("Error : " + error);
+  if(!isCached) document.getElementById("content").innerHTML = '<h4>Oops.. page can\'t accessed.</h4>';
 }
 
 //============== Req Football API ==============
@@ -71,7 +73,10 @@ function getStandings() {
           });
 
           document.getElementById("content").innerHTML = contentHTML;
+          isCached = true;
         });
+      } else {
+        isCached = false;
       }
     });
   }
@@ -151,7 +156,10 @@ function getTeam(idTeam) {
           if(data.crestUrl) document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
           document.getElementById("teamName").innerHTML = data.name;
           document.getElementById("content").innerHTML = contentHTML;
+          isCached = true;
         });
+      } else {
+        isCached = false;
       }
     });
   }
@@ -184,22 +192,26 @@ function getAllFavorite() {
   var contentHTML = '';
 
   getListFavorite().then(function(items) {
-    items.forEach(function(data) {
-      contentHTML += `
-        <div class="col s12 m4">
-          <div class="card">
-            <div class="card-image thumbnail">
-              <img src="${data.crestUrl}">
-              <a class="btn-floating halfway-fab waves-effect waves-light red" id="removeFavorite" onclick="deleteFavorite(${data.idTeam})"><i class="material-icons">remove</i></a>
-            </div>
-            <div class="card-content">
-              <span class="card-title truncate"><a class="nav-page" href="#team/${data.idTeam}">${data.name}</a></span>
-              <a class="truncate" href="${data.website}" target="_blank">${data.website}</a>
+    if(items.length > 0) {
+      items.forEach(function(data) {
+        contentHTML += `
+          <div class="col s12 m4">
+            <div class="card">
+              <div class="card-image thumbnail">
+                <img src="${data.crestUrl}">
+                <a class="btn-floating halfway-fab waves-effect waves-light red" id="removeFavorite" onclick="deleteFavorite(${data.idTeam})"><i class="material-icons">remove</i></a>
+              </div>
+              <div class="card-content">
+                <span class="card-title truncate"><a class="nav-page" href="#team/${data.idTeam}">${data.name}</a></span>
+                <a class="truncate" href="${data.website}" target="_blank">${data.website}</a>
+              </div>
             </div>
           </div>
-        </div>
-      `;
-    });
+        `;
+      });
+    } else {
+      contentHTML = '<h5>Your favorite list still empty</h5>';
+    }
   
     document.getElementById("content").innerHTML = contentHTML;
   });
