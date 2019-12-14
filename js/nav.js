@@ -72,10 +72,11 @@ function loadPage(page, param=null) {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4) {
       var content = document.querySelector('#body-content');
+
+      route(page, param);
+
       if (this.status == 200) {
         content.innerHTML = xhttp.responseText;
-
-        route(page, param);
       } else if (this.status == 404) {
         content.innerHTML = '<h4>Page not found.</h4>';
       } else {

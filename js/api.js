@@ -180,6 +180,33 @@ function getTeam(idTeam) {
     .catch(error);
 }
 
+function getAllFavorite() {
+  var contentHTML = '';
+
+  getListFavorite().then(function(items) {
+    items.forEach(function(data) {
+      contentHTML += `
+        <div class="col s12 m4">
+          <div class="card">
+            <div class="card-image thumbnail">
+              <img src="${data.crestUrl}">
+              <a class="btn-floating halfway-fab waves-effect waves-light red" id="removeFavorite" onclick="deleteFavorite(${data.idTeam})"><i class="material-icons">remove</i></a>
+            </div>
+            <div class="card-content">
+              <span class="card-title truncate"><a class="nav-page" href="#team/${data.idTeam}">${data.name}</a></span>
+              <a class="truncate" href="${data.website}" target="_blank">${data.website}</a>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  
+    document.getElementById("content").innerHTML = contentHTML;
+  });
+}
+
+//============== Sub function ==============
+
 function addTeamInfo(data) {
   var contentHTML = `
     <div class="row card">
