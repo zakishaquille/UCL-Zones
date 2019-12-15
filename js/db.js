@@ -10,18 +10,20 @@ function insertFavorite(data) {
     var tx = db.transaction('favorite_team', 'readwrite');
     var store = tx.objectStore('favorite_team');
     var item = {
-        idTeam: data.id,
-        name: data.name,
-        website: data.website,
-        crestUrl: data.crestUrl,
-        created: new Date().getTime()
+      idTeam: data.id,
+      name: data.name,
+      website: data.website,
+      crestUrl: data.crestUrl.replace(/^http:\/\//i, 'https://'),
+      created: new Date().getTime()
     };
-    store.add(item);
+
+    store.put(item);
+
     return tx.complete;
   }).then(function() {
-    console.log('Data berhasil disimpan.');
+    M.toast({html: 'Data berhasil disimpan.'})
   }).catch(function() {
-    console.log('Data gagal disimpan.')
+    M.toast({html: 'Data gagal disimpan.'})
   })
 }
 
@@ -44,9 +46,9 @@ function deleteFavorite(idTeam) {
     store.delete(idTeam);
     return tx.complete;
   }).then(function() {
-    console.log('Data berhasil dihapus');
+    M.toast({html: 'Data berhasil dihapus.'})
     getAllFavorite();
   }).catch(function() {
-    console.log('Data gagal dihapus')
+    M.toast({html: 'Data gagal dihapus.'})
   });
 }

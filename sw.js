@@ -15,10 +15,11 @@ var urlsToCache = [
   "/js/materialize.min.js",
   "/js/nav.js",
   "/js/service-registry.js",
+  "/vendor/idb-2.1.3/lib/idb.js",
   "/favicon.ico",
-  "/images/icon x64.png",
-  "/images/icon x192.png",
-  "/images/icon x512.png",
+  "/images/icon-x64.png",
+  "/images/icon-x192.png",
+  "/images/icon-x512.png",
   "/images/jumbotron.jpg",
   "/fonts/MaterialIcons-Regular.eot",
   "/fonts/MaterialIcons-Regular.ttf",
@@ -87,7 +88,7 @@ self.addEventListener('push', function(event) {
   }
   var options = {
     body: body,
-    icon: 'images/icon x64.png',
+    icon: 'images/icon-x64.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),

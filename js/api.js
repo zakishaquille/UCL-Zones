@@ -153,7 +153,7 @@ function getTeam(idTeam) {
           fab.addEventListener("click", addFavorite);
           fab.myParam = data;
 
-          if(data.crestUrl) document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
+          if(data.crestUrl) document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl.replace(/^http:\/\//i, 'https://')}"/>`;
           document.getElementById("teamName").innerHTML = data.name;
           document.getElementById("content").innerHTML = contentHTML;
           isCached = true;
@@ -181,7 +181,7 @@ function getTeam(idTeam) {
       fab.addEventListener("click", addFavorite);
       fab.myParam = data;
 
-      if(data.crestUrl) document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl}"/>`;
+      if(data.crestUrl) document.getElementById("teamLogo").innerHTML = `<img class="img-detail" src="${data.crestUrl.replace(/^http:\/\//i, 'https://')}"/>`;
       document.getElementById("teamName").innerHTML = data.name;
       document.getElementById("content").innerHTML = contentHTML;
     })
@@ -198,7 +198,7 @@ function getAllFavorite() {
           <div class="col s12 m4">
             <div class="card">
               <div class="card-image thumbnail">
-                <img src="${data.crestUrl}">
+                <img src="${data.crestUrl.replace(/^http:\/\//i, 'https://')}">
                 <a class="btn-floating halfway-fab waves-effect waves-light red" id="removeFavorite" onclick="deleteFavorite(${data.idTeam})"><i class="material-icons">remove</i></a>
               </div>
               <div class="card-content">
