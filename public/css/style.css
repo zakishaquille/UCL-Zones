@@ -56,6 +56,9 @@ nav.menu a {
   height: 70vh;
   overflow: hidden;
 }
+.jumbotron img {
+  width: 100%;
+}
 .blog-detail p {
   margin-bottom: 2% !important;
 }
