@@ -3,9 +3,9 @@ var webPush = require('web-push');
 const keys = {
    "publicKey": "BOZn8CErs6kN5pioue5V6a2rDjBIOJj9LQsbbhDQQpqibL6M2RevvSGzHBr-W6oEyuxvQjGgd4UAlvF3bzXbOcY",
    "privateKey": "VZo-A4X5WM3e2nT6VvSn9gzkb8UQMuczzMblFov73aA",
-   "endpoint": "https://fcm.googleapis.com/fcm/send/fdMHH6LGHvA:APA91bEJ89rELB_KBtXzVUdcAZSHscZt2X_n1oJVQSY9b2Rv5Jfcy4sgiwOn-QjThgaRl76_Lk5A2MJVWF2-FpXAPPIoZH_BMF2qGS611LKOrHwU31okudG-QBhp5eM4Dh0EcxyKZxkb",
-   "p256dh": "BOf2O3Fb6t6XZSNJdx+qoy9r1nSE+dK1PtKjT2QfDZOBwGln9MhPEzqmjC71miE+Zi0rXtlTpMpgWiFS6C4QUpg=",
-   "auth": "khCfklq5J3+KwKyDKjCWDQ=="
+   "endpoint": "https://fcm.googleapis.com/fcm/send/cJlelgd1ddc:APA91bGXYGFpxoe_5SLPg6NhRytAf-n3NJNw0j6Ra7xjS6HPPbc6EesMG0XH4mUNpiBqWsWY_63cHWi1crqwQCUxzc-Q-qJNZPY7Owx4LYsJ6CcQQAQJY4uu5m7qidlyJifSYifnKGu9",
+   "p256dh": "BNa0xTDbbKiJUvQbOxmIfa72ZKlWJJOq2UDgO4JHp54EJPiz1UJZlNuUzPhkVzj3jkF10GHW2ZkZ2xk9zHYEDuU=",
+   "auth": "aeddM1nFaam/z02wUWQJhg=="
 };
  
  
