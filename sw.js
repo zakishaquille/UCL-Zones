@@ -1,83 +1,60 @@
-const CACHE_NAME = "uclzones-v8";
-var urlsToCache = [
-  "/",
-  "/manifest.json",
-  "/nav.html",
-  "/index.html",
-  "/pages/home.html",
-  "/pages/team.html",
-  "/pages/myfavorite.html",
-  "/css/material-icons.css",
-  "/css/materialize.min.css",
-  "/css/style.scss",
-  "/js/api.js",
-  "/js/db.js",
-  "/js/materialize.min.js",
-  "/js/nav.js",
-  "/js/service-registry.js",
-  "/vendor/idb-2.1.3/lib/idb.js",
-  "/favicon.ico",
-  "/images/icon-x64.png",
-  "/images/icon-x192.png",
-  "/images/icon-x512.png",
-  "/images/jumbotron.jpg",
-  "/fonts/MaterialIcons-Regular.eot",
-  "/fonts/MaterialIcons-Regular.ttf",
-  "/fonts/MaterialIcons-Regular.woff",
-  "/fonts/MaterialIcons-Regular.woff2",
-  "/fonts/poppins-regular.ttf",
-  "/fonts/poppins-regular.woff",
-  "/fonts/poppins-regular.woff2",
-  "/fonts/poppins-medium.ttf",
-  "/fonts/poppins-medium.woff",
-  "/fonts/poppins-medium.woff2",
-  "/fonts/poppins-bold.ttf",
-  "/fonts/poppins-bold.woff",
-  "/fonts/poppins-bold.woff2"
-];
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js');
+ 
+if (workbox)
+  console.log(`Workbox berhasil dimuat`);
+else
+  console.log(`Workbox gagal dimuat`);
 
-self.addEventListener("install", function(event) {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll(urlsToCache);
-    })
-  );
-});
+workbox.precaching.precacheAndRoute([
+  { url: "/", revision: '1' },
+  { url: "/manifest.json", revision: '1' },
+  { url: "/nav.html", revision: '1' },
+  { url: "/index.html", revision: '1' },
+  { url: "/pages/home.html", revision: '1' },
+  { url: "/pages/team.html", revision: '1' },
+  { url: "/pages/myfavorite.html", revision: '1' },
+  { url: "/css/material-icons.css", revision: '1' },
+  { url: "/css/materialize.min.css", revision: '1' },
+  { url: "/css/style.scss", revision: '1' },
+  { url: "/js/api.js", revision: '1' },
+  { url: "/js/db.js", revision: '1' },
+  { url: "/js/materialize.min.js", revision: '1' },
+  { url: "/js/nav.js", revision: '1' },
+  { url: "/js/service-registry.js", revision: '1' },
+  { url: "/vendor/idb-2.1.3/lib/idb.js", revision: '1' },
+  { url: "/favicon.ico", revision: '1' },
+  { url: "/images/icon-x64.png", revision: '1' },
+  { url: "/images/icon-x192.png", revision: '1' },
+  { url: "/images/icon-x512.png", revision: '1' },
+  { url: "/images/jumbotron.jpg", revision: '1' },
+  { url: "/fonts/MaterialIcons-Regular.eot", revision: '1' },
+  { url: "/fonts/MaterialIcons-Regular.ttf", revision: '1' },
+  { url: "/fonts/MaterialIcons-Regular.woff", revision: '1' },
+  { url: "/fonts/MaterialIcons-Regular.woff2", revision: '1' },
+  { url: "/fonts/poppins-regular.ttf", revision: '1' },
+  { url: "/fonts/poppins-regular.woff", revision: '1' },
+  { url: "/fonts/poppins-regular.woff2", revision: '1' },
+  { url: "/fonts/poppins-medium.ttf", revision: '1' },
+  { url: "/fonts/poppins-medium.woff", revision: '1' },
+  { url: "/fonts/poppins-medium.woff2", revision: '1' },
+  { url: "/fonts/poppins-bold.ttf", revision: '1' },
+  { url: "/fonts/poppins-bold.woff", revision: '1' },
+  { url: "/fonts/poppins-bold.woff2", revision: '1' }
+]);
 
-self.addEventListener('fetch', function(event) {
-  var base_url = "https://api.football-data.org/v2/";
-  if (event.request.url.indexOf(base_url) > -1) {
-    event.respondWith(
-      caches.open(CACHE_NAME).then(function(cache) {
-        return fetch(event.request).then(function(response) {
-          cache.put(event.request.url, response.clone());
-          return response;
-        })
-      })
-    );
-  } else {
-    event.respondWith(
-      caches.match(event.request, { ignoreSearch: true }).then(function(response) {
-        return response || fetch (event.request);
-      })
-    )
-  }
-});
+workbox.routing.registerRoute(
+  /^https:\/\/api.football-data.org\/v2/,
+  workbox.strategies.staleWhileRevalidate({
+    cacheName: 'football-data'
+  })
+);
 
-self.addEventListener('activate', function(event) {
-  console.log('Aktivasi service worker baru');
-  event.waitUntil(
-    caches.keys().then(function(cacheNames) {
-      return Promise.all(
-        cacheNames.map(function(cacheName) {
-          if (cacheName !== CACHE_NAME && cacheName.startsWith("uclzones")) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-});
+workbox.routing.registerRoute(
+  /^https:\/\/storage.googleapis.com/,
+  workbox.strategies.staleWhileRevalidate({
+    cacheName: 'google-api-storage',
+  })
+);
 
 self.addEventListener('push', function(event) {
   var body;

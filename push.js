@@ -3,9 +3,9 @@ var webPush = require('web-push');
 const keys = {
    "publicKey": "BOZn8CErs6kN5pioue5V6a2rDjBIOJj9LQsbbhDQQpqibL6M2RevvSGzHBr-W6oEyuxvQjGgd4UAlvF3bzXbOcY",
    "privateKey": "VZo-A4X5WM3e2nT6VvSn9gzkb8UQMuczzMblFov73aA",
-   "endpoint": "https://fcm.googleapis.com/fcm/send/fZF0t6IZQUM:APA91bEWUqJFOWQtjD9I6dWJ-U9LuVQOqpZ3BWwhFvskSHLhSwwlsBcw0oCqU6rtpEs0JvUjNOKc2dXdycyX5kBriVEsawJeZ3zr7POA3JKMi7iXm_lNXOCTsKncQ5LN0CQNLs1YCPbt",
-   "p256dh": "BLR9SchiZ9WOXOnVmEDYbzZ7deuzP4faRMvcYn6Nw2Nq4Z47M3Qycvg+sRR/KPWkxmQd/0qm1vOCYVDjgEjyPF4=",
-   "auth": "Z8tQFCTKZUPNTaY2y1r8pw=="
+   "endpoint": "https://fcm.googleapis.com/fcm/send/fdMHH6LGHvA:APA91bEJ89rELB_KBtXzVUdcAZSHscZt2X_n1oJVQSY9b2Rv5Jfcy4sgiwOn-QjThgaRl76_Lk5A2MJVWF2-FpXAPPIoZH_BMF2qGS611LKOrHwU31okudG-QBhp5eM4Dh0EcxyKZxkb",
+   "p256dh": "BOf2O3Fb6t6XZSNJdx+qoy9r1nSE+dK1PtKjT2QfDZOBwGln9MhPEzqmjC71miE+Zi0rXtlTpMpgWiFS6C4QUpg=",
+   "auth": "khCfklq5J3+KwKyDKjCWDQ=="
 };
  
  

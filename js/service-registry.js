@@ -1,6 +1,8 @@
 if ("serviceWorker" in navigator) {
-    registerServiceWorker();
-    requestPermission();
+    window.addEventListener('load', function() {
+        registerServiceWorker();
+        requestPermission();
+    });
 } else {
     console.warn("ServiceWorker belum didukung browser ini.");
 }
